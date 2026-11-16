@@ -128,7 +128,6 @@ body::before{background:radial-gradient(40% 35% at 15% 20%,rgba(56,189,248,.35),
 .card select option{background:var(--fld);color:var(--tx)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-@media print{body{background:#fff}body::before,.top,main>*:not(#out),.bar,.paper::before{display:none!important}.paper{border:0;box-shadow:none;animation:none;padding-top:0}}
 
 /* ===== নতুন অংশ ===== */
 .top{padding-bottom:92px}
@@ -161,23 +160,32 @@ button.dng:hover{background:#be123c;color:#fff}
 .ed h4{margin:16px 0 6px;display:flex;justify-content:space-between;align-items:center;color:var(--ac)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#1a0b3d;color:#fff;padding:10px 18px;border-radius:99px;font-size:15px;box-shadow:0 10px 30px -8px #000;animation:rise .3s}
 
-/* দুই কলামের MCQ: বাম কলাম পাতা ভরে তারপর ডান কলাম, তারপর পরের পেজ */
-.mcq{column-count:2;column-gap:28px;column-rule:1px solid var(--pbd);column-fill:balance}
+/* MCQ: স্ক্রিনে দুই কলাম; অপশন বোর্ড-স্টাইলে (৪টি এক লাইনে / ২×২ / নিচে নিচে) */
+.mcq{column-count:2;column-gap:28px;column-rule:1px solid var(--pbd)}
 .mcq .q{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px}
-.q .opts2{display:flex;flex-wrap:wrap;gap:1px 18px;margin-left:12px;font-size:14.5px}
-.q .opts2 .op{margin:0;font-size:inherit}
+.q .opts2{display:grid;grid-template-columns:1fr;gap:2px 14px;margin-left:12px;font-size:14.5px}
+.q .opts2 .op{margin:0;font-size:inherit;min-width:0}
 @media (max-width:520px){.mcq{column-count:1;column-rule:0}}
+
+/* প্রিন্ট/PDF: নিজে মাপা পেজ */
 #pa{display:none}
+#pa.pm{display:block;position:absolute;left:-99999px;top:0;width:186mm;visibility:hidden}
+#pa .paper{font-size:12px;line-height:1.4;padding:0;margin:0;color:#000;border:0;border-radius:0;box-shadow:none;animation:none;background:#fff}
+#pa .paper::before{display:none}
+.sheet{height:268mm;display:flex;flex-direction:column;overflow:hidden;break-after:page;page-break-after:always}
+.sbody{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);column-gap:14mm;position:relative}
+.sbody::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px solid #999}
+.scol{min-width:0;height:100%;overflow:hidden}
+.scol .q{margin:0 0 9px;break-inside:avoid}
+.scol .q p{margin:0 0 3px;font-weight:600}
 @media print{
   @page{size:A4;margin:12mm}
-  html,body{background:#fff!important}
+  html,body{background:#fff!important;min-height:0!important;height:auto!important;margin:0!important}
+  body::before{display:none!important}
   body>*:not(#pa){display:none!important}
   #pa{display:block!important}
-  .paper{font-size:12px;line-height:1.4;padding:0;color:#000}
-  .mcq{column-count:2!important;column-fill:auto;column-rule:1px solid #bbb}
-  .mcq .q{margin:0 0 8px}
-  .q .opts2{font-size:12px}
-  .keyp{break-before:page;page-break-before:always;border-top:0;margin-top:0;padding-top:0}
+  #pa .q .opts2{font-size:12px}
+  #pa .keyp{break-before:page;page-break-before:always;border-top:0;margin-top:0;padding-top:0}
 }
 
 /* ছবি থেকে লেখা (লেন্স-স্টাইল) */
@@ -449,8 +457,50 @@ function buildPaper(s,withKey){
   }
   return p;
 }
-function printSet(s,k){const pa=$("pa");pa.textContent="";pa.appendChild(buildPaper(s,k));setTimeout(()=>window.print(),80);}
-window.addEventListener("afterprint",()=>{$("pa").textContent="";});
+function fitOpts(root){
+  root.querySelectorAll(".opts2").forEach(o=>{
+    const ops=[...o.children];if(!ops.length)return;
+    o.style.display="block";
+    ops.forEach(x=>{x.style.display="inline-block";x.style.whiteSpace="nowrap";});
+    const avail=o.clientWidth,gap=14;let mx=0;
+    ops.forEach(x=>{mx=Math.max(mx,x.getBoundingClientRect().width);});
+    ops.forEach(x=>{x.style.display="";x.style.whiteSpace="";});
+    const c=(mx*4+gap*3<=avail)?4:(mx*2+gap<=avail)?2:1;
+    o.style.display="grid";o.style.gridTemplateColumns="repeat("+c+",minmax(0,1fr))";
+  });
+}
+function paginate(pa,paper){
+  const ph=paper.querySelector(".ph"),qs=[...paper.querySelectorAll(".mcq .q")],key=paper.querySelector(".keyp");
+  paper.textContent="";
+  let cols,col=0,first=true,last=null;
+  const newSheet=()=>{
+    const sh=el("div","sheet");if(first){sh.appendChild(ph);first=false;}
+    const body=el("div","sbody"),c1=el("div","scol"),c2=el("div","scol");
+    body.append(c1,c2);sh.appendChild(body);paper.appendChild(sh);cols=[c1,c2];col=0;last=sh;
+  };
+  newSheet();
+  qs.forEach(q=>{
+    for(;;){
+      const c=cols[col];c.appendChild(q);fitOpts(q);
+      if(c.scrollHeight<=c.clientHeight+1||c.children.length===1)break;
+      q.remove();
+      if(col===0)col=1;else newSheet();
+    }
+  });
+  if(last)last.style.breakAfter=last.style.pageBreakAfter="auto";
+  if(key)paper.appendChild(key);
+}
+function printSet(s,k){
+  const pa=$("pa");pa.textContent="";
+  const paper=buildPaper(s,k);pa.appendChild(paper);pa.classList.add("pm");
+  const go=()=>{
+    if(s.type==="mcq")paginate(pa,paper);
+    pa.classList.remove("pm");
+    setTimeout(()=>window.print(),150);
+  };
+  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go);
+}
+window.addEventListener("afterprint",()=>{$("pa").textContent="";$("pa").classList.remove("pm");});
 
 function saveWord(s,k){
   const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang);
@@ -498,7 +548,7 @@ function dlDialog(s,noKey){
 window.render=function(){showKey=false;drawOut();};
 function drawOut(){
   const out=$("out");out.textContent="";const s=state;
-  out.appendChild(buildPaper(s,showKey));
+  out.appendChild(buildPaper(s,showKey));fitOpts(out);
   const bar=el("div","bar");
   const k=el("button","sec",showKey?"উত্তর লুকান":"উত্তর দেখান");k.onclick=()=>{showKey=!showKey;drawOut();};
   const cp=(t,w)=>{const b=el("button","sec",t);b.onclick=async()=>{try{await navigator.clipboard.writeText(paperText(w));b.textContent="কপি হয়েছে";}catch(e){b.textContent="কপি করা যায়নি";}};return b;};
@@ -535,9 +585,9 @@ async function openSet(m,mode){
     if(mode==="dl")return dlDialog(s,role==="visitor");
     if(mode==="edit")return editDialog(s,m);
     let kk=false;const w=el("div"),box=el("div");
-    const draw=()=>{box.textContent="";box.appendChild(buildPaper(s,kk&&role!=="visitor"));};
+    const draw=()=>{box.textContent="";box.appendChild(buildPaper(s,kk&&role!=="visitor"));fitOpts(box);};
     if(role!=="visitor"){const b=el("button","sec","উত্তর দেখান / লুকান");b.onclick=()=>{kk=!kk;draw();};w.appendChild(b);}
-    w.appendChild(box);draw();modal(ttl(m),w,true);
+    w.appendChild(box);draw();modal(ttl(m),w,true);fitOpts(box);
   }catch(e){toast(e.message);}
 }
 function editDialog(s,m){
