@@ -317,11 +317,12 @@ const norm=s=>s.replace(/\s+/g,"").toLowerCase();
 
 $("go").onclick=async()=>{
   const inst=$("inst").value.trim(),cls=$("cls").value.trim(),subj=$("subj").value.trim(),name=$("ename").value.trim(),time=$("etime").value,marks=$("emarks").value,stem=$("stem").value.trim();
-  if(!inst||!cls||!subj||!name||!time||!marks||!stem){say("প্রতিষ্ঠান, শ্রেণি, বিষয়, পরীক্ষার নাম, সময়, পূর্ণমান ও উদ্দীপক সব দিন।");return;}
+  if(!inst||!cls||!subj||!name||!time||!marks||!stem){say("প্রতিষ্ঠান, শ্রেণি, বিষয়, পরীক্ষার নাম, সময়, পূর্ণমান ও উদ্দীপক সব দিন।");$("out").scrollIntoView({behavior:"smooth",block:"center"});return;}
   const type=$("type").value,auto=type==="creative"&&$("smode").value==="auto",total=+$("n").value,lang=$("lang").value,btn=$("go"),BATCH=type==="creative"?1:type==="short"?4:6;
   const sig=[type,auto,inst,cls,subj,name,stem,total,lang].join("|");
   let items=(partial&&partial.sig===sig)?partial.items:[];
   btn.disabled=true;
+  say(lang==="Bengali"?"প্রশ্ন বানানো হচ্ছে… পেজটি খোলা রাখুন":"Generating questions… keep this page open",0);$("out").scrollIntoView({behavior:"smooth",block:"center"});
   try{if(window.Notification&&Notification.permission==="default")Notification.requestPermission();}catch(e){}
   try{if(navigator.wakeLock)wake=await navigator.wakeLock.request("screen");}catch(e){}
   let fails=0;lastErr="";
