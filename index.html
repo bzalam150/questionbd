@@ -129,16 +129,85 @@ body::before{background:radial-gradient(40% 35% at 15% 20%,rgba(56,189,248,.35),
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 @media print{body{background:#fff}body::before,.top,main>*:not(#out),.bar,.paper::before{display:none!important}.paper{border:0;box-shadow:none;animation:none;padding-top:0}}
+
+/* ===== নতুন অংশ ===== */
+.top{padding-bottom:92px}
+.tabs{position:relative;z-index:1;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;margin-top:22px}
+.tabs{gap:14px;margin-top:10px}
+.tabs button,.tabs .role{--g:#ff4d6a;--r:-6deg;--y:0px;width:auto;min-width:92px;min-height:58px;margin:0;padding:10px 18px;display:grid;place-items:center;text-align:center;font-size:15px;font-weight:700;line-height:1.25;color:#fff;border-radius:18px;border:1px solid rgba(255,255,255,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 16px 28px -8px var(--g);transform:translateY(var(--y)) rotate(var(--r));animation:float 5s ease-in-out infinite;transition:filter .2s,box-shadow .2s}
+.tabs button:hover,.tabs button:active{filter:brightness(1.1);transform:translateY(var(--y)) rotate(var(--r))}
+.tabs #tBank{--g:#ff4d6a;--r:-6deg;background:linear-gradient(145deg,#ff7a63,#e8445a)}
+.tabs #tCreate{--g:#8b5cf6;--r:-2deg;animation-delay:-1.5s;background:linear-gradient(145deg,#b08cf7,#7c4ddb)}
+.tabs .role{--g:#14b8a6;--r:3deg;animation-delay:-3s;background:linear-gradient(145deg,#2dd4bf,#0f9d93)}
+.tabs .role:empty,.tabs button[hidden]{display:none}
+.tabs #loginBtn{--g:#2f80ed;--r:7deg;animation-delay:-4.5s;background:linear-gradient(145deg,#4da3ff,#1566d6)}
+.tabs button.on{border-color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 0 0 3px rgba(255,255,255,.55),0 18px 30px -8px var(--g)}
+.bank{position:relative;z-index:1;margin-top:-40px;padding:20px 16px;border-radius:28px;background:var(--card);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid var(--bd);box-shadow:var(--sh);animation:rise .6s both}
+.bt{display:flex;gap:8px}.bt select{width:auto;flex:none}
+.bc{padding:14px;border:1px solid var(--bd);border-radius:16px;margin-top:10px;background:var(--fld)}
+.bc h3{margin:0 0 2px;font-size:17px}.bc small{color:var(--mut)}
+.badge{display:inline-block;font-size:12.5px;font-weight:600;padding:1px 10px;border-radius:99px;color:#fff;background:var(--ac);margin-right:6px}
+.badge.short{background:#0d9488}.badge.creative{background:#e11d48}
+.acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+button.dng{color:#be123c;border-color:#be123c66}
+button.dng:hover{background:#be123c;color:#fff}
+.demo{margin:0 0 12px;font-size:14px}
+.md{position:fixed;inset:0;z-index:50;background:rgba(10,5,25,.62);overflow:auto;padding:14px;display:flex;justify-content:center;align-items:flex-start}
+.mb{position:relative;width:100%;max-width:460px;margin:20px 0;padding:18px 16px;border-radius:22px;background:var(--bg);color:var(--tx);border:1px solid var(--bd);box-shadow:var(--sh)}
+.mb.wide{max-width:820px}
+.mb h3{margin:0 0 12px;font-size:18px;padding-right:80px}
+.mb .x{position:absolute;right:14px;top:14px}
+.mb input,.mb select,.mb textarea{margin-bottom:8px}
+.ed h4{margin:16px 0 6px;display:flex;justify-content:space-between;align-items:center;color:var(--ac)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#1a0b3d;color:#fff;padding:10px 18px;border-radius:99px;font-size:15px;box-shadow:0 10px 30px -8px #000;animation:rise .3s}
+
+/* দুই কলামের MCQ পাতা */
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;position:relative}
+.pg::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px solid var(--pbd)}
+.pg+.pg{margin-top:20px;padding-top:16px;border-top:1px dashed var(--pbd)}
+.col{min-width:0}
+.q .op{font-size:14.5px;margin-left:12px}
+@media (max-width:520px){.pg{grid-template-columns:1fr}.pg::after{display:none}}
+#pa{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  body>*:not(#pa){display:none!important}
+  #pa{display:block!important}
+  .paper{font-size:12px;line-height:1.4;padding:0}
+  .pg{grid-template-columns:1fr 1fr!important;break-inside:avoid}
+  .pg::after{display:block!important}
+  .pg+.pg,.keyp{break-before:page;border-top:0;margin-top:0;padding-top:0}
+  .q{margin:8px 0}.q .op{font-size:12px}
+}
+
+/* ছবি থেকে লেখা (লেন্স-স্টাইল) */
+.imgrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px}
+.imgrow small{color:var(--mut);font-size:12.5px}
+.ocr .mb{max-width:640px}
+.ocr .mb h3{padding-right:90px}
+.ocrbox{position:relative;display:flex;justify-content:center;background:color-mix(in srgb,var(--ac) 8%,var(--fld));border:1px solid var(--bd);border-radius:16px;padding:8px;overflow:hidden}
+.ocrwrap{position:relative;display:inline-block;line-height:0;max-width:100%}
+.ocrwrap img{display:block;max-width:100%;max-height:52vh;width:auto;height:auto;border-radius:8px;user-select:none;-webkit-user-select:none}
+.ocrov{position:absolute;inset:0;touch-action:none;user-select:none;-webkit-user-select:none}
+.ocrov .w{position:absolute;border-radius:3px;border:1px solid color-mix(in srgb,var(--gold) 80%,transparent);background:color-mix(in srgb,var(--gold) 14%,transparent);cursor:pointer}
+.ocrov .w.on{border-color:var(--ac);background:color-mix(in srgb,var(--ac) 38%,transparent)}
+.scan{position:absolute;left:0;right:0;height:3px;top:0;background:linear-gradient(90deg,transparent,var(--ac2),var(--gold),transparent);box-shadow:0 0 18px 4px var(--ac2);animation:scanmv 1.6s ease-in-out infinite alternate;pointer-events:none}
+@keyframes scanmv{from{top:0}to{top:calc(100% - 3px)}}
+.ocrst{margin:10px 2px 0;font-size:14px;color:var(--mut);min-height:20px}
+.ocrbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.ocrbar button.go2{flex:1;min-width:150px;width:auto;margin:0;font-size:16px;padding:12px 18px;border-radius:999px}
+.ocrbar button.sec{margin:0}
 </style>
 </head>
 <body>
 <header class="top">
 <h1>প্রশ্নপত্র জেনারেটর</h1>
 <div class="orn"><i></i><b></b><i></i></div>
-<p class="sub">পরীক্ষার তথ্য ও সৃজনশীল উদ্দীপক দিন, MCQ প্রশ্নপত্র তৈরি হবে। শেষ হলে জানিয়ে দেবে।</p>
-<div class="tiles" aria-hidden="true"><span class="t1">MCQ</span><span class="t2">✎</span><span class="t3">?</span><span class="t4">ক</span><span class="t5">✓</span></div>
+<p class="sub">পরীক্ষার তথ্য ও সৃজনশীল উদ্দীপক দিন, প্রশ্নপত্র তৈরি করুন, প্রশ্ন ব্যাংকে জমা রাখুন এবং PDF বা Word-এ ডাউনলোড করুন।</p>
+<nav class="tabs"><button type="button" id="tBank" class="on">প্রশ্ন ব্যাংক</button><button type="button" id="tCreate" hidden>প্রশ্ন তৈরি</button><span class="role" id="roleTxt"></span><button type="button" id="loginBtn">লগইন</button></nav>
 </header>
 <main>
+<section id="vCreate" hidden>
 <div class="card">
 <label for="inst">প্রতিষ্ঠানের নাম</label><input id="inst" list="dl_inst" autocomplete="off" placeholder="যেমন: ঢাকা সরকারি উচ্চ বিদ্যালয়">
 <div class="row">
@@ -152,6 +221,7 @@ body::before{background:radial-gradient(40% 35% at 15% 20%,rgba(56,189,248,.35),
 </div>
 <label for="stem" id="stemLabel">সৃজনশীল প্রশ্ন / উদ্দীপক / টপিক</label>
 <textarea id="stem"></textarea>
+<div class="imgrow"><button type="button" class="sec" id="imgBtn">📷 ছবি আপলোড করে লেখা নিন</button><small>ঐচ্ছিক</small><input type="file" id="imgFile" accept="image/*" hidden></div>
 <div class="row">
 <div><label for="type">প্রশ্নের ধরন</label><select id="type"><option value="mcq">MCQ (বহুনির্বাচনি)</option><option value="creative">সৃজনশীল</option><option value="short">সংক্ষিপ্ত প্রশ্ন</option></select></div>
 <div id="smodeWrap" hidden><label for="smode">উদ্দীপক</label><select id="smode"><option value="own">আমি নিজে দেব</option><option value="auto">টপিক থেকে বানান</option></select></div>
@@ -170,6 +240,14 @@ body::before{background:radial-gradient(40% 35% at 15% 20%,rgba(56,189,248,.35),
 <datalist id="dl_etime"><option value="30"><option value="45"><option value="60"><option value="90"><option value="120"><option value="150"><option value="180"></datalist>
 <datalist id="dl_emarks"><option value="10"><option value="20"><option value="25"><option value="30"><option value="40"><option value="50"><option value="70"><option value="100"></datalist>
 <div id="out"></div>
+</section>
+<section id="vBank">
+<div class="bank">
+<p class="msg demo" id="demoNote" hidden>ডেমো মোড: Apps Script URL বসানো হয়নি, তাই ডেটা এই ব্রাউজারেই থাকছে। পরীক্ষার পাসওয়ার্ড: <b>admin</b> (অ্যাডমিন) ও <b>editor</b> (এডিটর)।</p>
+<div class="bt"><input id="bq" placeholder="খুঁজুন: প্রতিষ্ঠান, বিষয়, শ্রেণি…"><select id="bt"><option value="">সব ধরন</option><option value="mcq">MCQ</option><option value="short">সংক্ষিপ্ত</option><option value="creative">সৃজনশীল</option></select></div>
+<div id="bankList"></div>
+</div>
+</section>
 </main>
 <script>
 const $=id=>document.getElementById(id);
@@ -207,95 +285,6 @@ function paperText(withKey){
   s.items.forEach((it,i)=>{t+=num(i+1,s.lang)+". "+it.q+"\n"+it.options.map((o,j)=>lab[j]+") "+o).join("\n")+"\n\n";});
   if(withKey)t+=(bn?"উত্তরমালা\n":"Answer key\n")+s.items.map((it,i)=>num(i+1,s.lang)+"-"+lab[it.answer]).join(", ");
   return t;
-}
-function render(){
-  const out=$("out");out.textContent="";
-  const s=state,lab=LAB[s.lang],bn=s.lang==="Bengali";
-  const p=document.createElement("div");p.className="paper";
-  const h=document.createElement("div");h.className="ph";
-  const h1=document.createElement("h2");h1.textContent=s.inst;h.appendChild(h1);
-  const h2=document.createElement("div");h2.style.fontWeight="600";h2.textContent=s.name;h.appendChild(h2);
-  const h3=document.createElement("div");h3.style.fontSize="14px";h3.textContent=(bn?"শ্রেণি: ":"Class: ")+s.cls+"   |   "+(bn?"বিষয়: ":"Subject: ")+s.subj;h.appendChild(h3);
-  const meta=document.createElement("div");meta.className="meta";
-  const a=document.createElement("span");a.textContent=(bn?"সময়: ":"Time: ")+num(s.time,s.lang)+(bn?" মিনিট":" min");
-  const b=document.createElement("span");b.textContent=(bn?"পূর্ণমান: ":"Full marks: ")+num(s.marks,s.lang);
-  meta.append(a,b);h.appendChild(meta);p.appendChild(h);
-  if(s.type==="creative"){
-    s.items.forEach((it,i)=>{
-      const d=document.createElement("div");d.className="cq";
-      const q=document.createElement("p");q.textContent=num(i+1,s.lang)+". "+it.stem;d.appendChild(q);
-      parts(it).forEach(([j,x,m])=>{
-        const r=document.createElement("div");r.className="part";
-        const a1=document.createElement("span");a1.textContent=PL[s.lang][j]+") "+x;
-        const a2=document.createElement("span");a2.textContent=num(m,s.lang);
-        r.append(a1,a2);d.appendChild(r);
-      });
-      p.appendChild(d);
-    });
-    out.appendChild(p);
-    const key=document.createElement("div");key.className="key";key.hidden=true;
-    const kt=document.createElement("strong");kt.textContent=bn?"উত্তরমালা":"Answer key";key.appendChild(kt);
-    s.items.forEach((it,i)=>{
-      const kb=document.createElement("div");kb.className="cq";
-      const kh=document.createElement("p");kh.textContent=(bn?"প্রশ্ন ":"Question ")+num(i+1,s.lang);kb.appendChild(kh);
-      answers(it).forEach((a,j)=>{const r=document.createElement("div");r.className="part";const t1=document.createElement("span");t1.textContent=PL[s.lang][j]+") "+a;r.appendChild(t1);kb.appendChild(r);});
-      key.appendChild(kb);
-    });
-    p.appendChild(key);
-    out.appendChild(p);
-    const bar=document.createElement("div");bar.className="bar";
-    const k=document.createElement("button");k.className="sec";k.textContent="উত্তর দেখান";
-    k.onclick=()=>{key.hidden=!key.hidden;k.textContent=key.hidden?"উত্তর দেখান":"উত্তর লুকান";};
-    const c1=document.createElement("button");c1.className="sec";c1.textContent="প্রশ্নপত্র কপি";
-    const c2=document.createElement("button");c2.className="sec";c2.textContent="উত্তরসহ কপি";
-    const cp=(btn,w)=>async()=>{try{await navigator.clipboard.writeText(paperText(w));btn.textContent="কপি হয়েছে";}catch(e){btn.textContent="কপি করা যায়নি";}};
-    c1.onclick=cp(c1,false);c2.onclick=cp(c2,true);
-    const pr=document.createElement("button");pr.className="sec";pr.textContent="প্রিন্ট / PDF";pr.onclick=()=>{key.hidden=true;k.textContent="উত্তর দেখান";window.print();};
-    bar.append(k,c1,c2,pr);out.appendChild(bar);
-    return;
-  }
-  if(s.type==="short"){
-    s.items.forEach((it,i)=>{
-      const d=document.createElement("div");d.className="q";
-      const q=document.createElement("p");q.textContent=num(i+1,s.lang)+". "+it.q;d.appendChild(q);
-      p.appendChild(d);
-    });
-    const key=document.createElement("div");key.className="key";key.hidden=true;
-    const kt=document.createElement("strong");kt.textContent=bn?"উত্তরমালা":"Answer key";key.appendChild(kt);
-    s.items.forEach((it,i)=>{const r=document.createElement("div");r.className="part";const t1=document.createElement("span");t1.textContent=num(i+1,s.lang)+". "+it.a;r.appendChild(t1);key.appendChild(r);});
-    p.appendChild(key);out.appendChild(p);
-    const bar=document.createElement("div");bar.className="bar";
-    const k=document.createElement("button");k.className="sec";k.textContent="উত্তর দেখান";
-    k.onclick=()=>{key.hidden=!key.hidden;k.textContent=key.hidden?"উত্তর দেখান":"উত্তর লুকান";};
-    const c1=document.createElement("button");c1.className="sec";c1.textContent="প্রশ্নপত্র কপি";
-    const c2=document.createElement("button");c2.className="sec";c2.textContent="উত্তরসহ কপি";
-    const cp=(btn,w)=>async()=>{try{await navigator.clipboard.writeText(paperText(w));btn.textContent="কপি হয়েছে";}catch(e){btn.textContent="কপি করা যায়নি";}};
-    c1.onclick=cp(c1,false);c2.onclick=cp(c2,true);
-    const pr=document.createElement("button");pr.className="sec";pr.textContent="প্রিন্ট / PDF";pr.onclick=()=>{key.hidden=true;k.textContent="উত্তর দেখান";window.print();};
-    bar.append(k,c1,c2,pr);out.appendChild(bar);
-    return;
-  }
-  s.items.forEach((it,i)=>{
-    const d=document.createElement("div");d.className="q";
-    const q=document.createElement("p");q.textContent=num(i+1,s.lang)+". "+it.q;d.appendChild(q);
-    const o=document.createElement("div");o.className="opts";
-    it.options.forEach((x,j)=>{const e=document.createElement("div");e.textContent=lab[j]+") "+x;o.appendChild(e);});
-    d.appendChild(o);p.appendChild(d);
-  });
-  const key=document.createElement("div");key.className="key";key.hidden=true;
-  const kt=document.createElement("strong");kt.textContent=bn?"উত্তরমালা":"Answer key";key.appendChild(kt);
-  const g=document.createElement("div");g.className="grid";
-  s.items.forEach((it,i)=>{const e=document.createElement("span");e.textContent=num(i+1,s.lang)+"-"+lab[it.answer];g.appendChild(e);});
-  key.appendChild(g);p.appendChild(key);out.appendChild(p);
-  const bar=document.createElement("div");bar.className="bar";
-  const k=document.createElement("button");k.className="sec";k.textContent="উত্তরমালা দেখান";
-  k.onclick=()=>{key.hidden=!key.hidden;k.textContent=key.hidden?"উত্তরমালা দেখান":"উত্তরমালা লুকান";};
-  const c1=document.createElement("button");c1.className="sec";c1.textContent="প্রশ্নপত্র কপি";
-  const c2=document.createElement("button");c2.className="sec";c2.textContent="উত্তরসহ কপি";
-  const cp=(btn,w)=>async()=>{try{await navigator.clipboard.writeText(paperText(w));btn.textContent="কপি হয়েছে";}catch(e){btn.textContent="কপি করা যায়নি";}};
-  c1.onclick=cp(c1,false);c2.onclick=cp(c2,true);
-  const pr=document.createElement("button");pr.className="sec";pr.textContent="প্রিন্ট / PDF";pr.onclick=()=>{key.hidden=true;window.print();};
-  bar.append(k,c1,c2,pr);out.appendChild(bar);
 }
 function say(t,pct){
   const out=$("out");out.textContent="";
@@ -387,6 +376,332 @@ function hold(b,d){let t=null,r=null;
 hold(mi,-1);hold(pl,1);
 document.getElementById("type").addEventListener("change",show);
 show();
+})();
+</script>
+<div id="pa"></div>
+<script>
+(function(){
+/* ▼▼ Google Apps Script Web app URL এখানে বসান (ফাঁকা থাকলে ডেমো মোড চলবে) ▼▼ */
+const APPS_URL="https://script.google.com/macros/s/AKfycbxbl1n1n2d9xrak6bMX-T8zIsEVDQJt9HyXJTYsycc801L3jqE7Tj3_Damn3DF8m_0g/exec";
+/* ▲▲ ----------------------------------------------------------------- ▲▲ */
+const DEMO=!APPS_URL;
+let role="visitor",pw="",sets=[],showKey=false;
+const RN={visitor:"ভিজিটর",editor:"এডিটর",admin:"অ্যাডমিন"};
+const TN={mcq:"MCQ",short:"সংক্ষিপ্ত",creative:"সৃজনশীল"};
+const ANS=["answer","a","ak","akh","ag","agh"];
+const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
+const chunk=(a,n)=>{const r=[];for(let i=0;i<a.length;i+=n)r.push(a.slice(i,i+n));return r;};
+const strip=s=>{const c=JSON.parse(JSON.stringify(s));c.items.forEach(i=>ANS.forEach(k=>delete i[k]));return c;};
+const meta=s=>({id:s.id,type:s.type,lang:s.lang,count:s.items.length,inst:s.inst,name:s.name,cls:s.cls,subj:s.subj,time:s.time,marks:s.marks,created:s.created,by:s.by});
+const ttl=m=>[m.inst,m.name].filter(Boolean).join(" — ");
+function toast(t){const e=el("div","toast",t);document.body.appendChild(e);setTimeout(()=>e.remove(),2800);}
+function modal(title,body,wide){
+  const m=el("div","md"),b=el("div","mb"+(wide?" wide":"")),x=el("button","sec x","✕ বন্ধ");
+  b.append(x,el("h3",null,title),body);m.appendChild(b);document.body.appendChild(m);
+  const close=()=>m.remove();x.onclick=close;m.addEventListener("mousedown",e=>{if(e.target===m)close();});return close;
+}
+
+/* ---------- ডেটা স্তর: Apps Script (Google Drive) বা ডেমো ---------- */
+async function api(action,data){
+  if(DEMO)return demo(action,data||{});
+  const r=await fetch(APPS_URL,{method:"POST",body:JSON.stringify(Object.assign({action,pw},data||{}))});
+  const j=await r.json();if(j.error)throw new Error(j.error);return j;
+}
+function demo(action,d){
+  const db=JSON.parse(localStorage.getItem("qb_demo")||"[]"),save=()=>localStorage.setItem("qb_demo",JSON.stringify(db));
+  const rl=pw==="admin"?"admin":pw==="editor"?"editor":"visitor";
+  if(action==="login")return{role:rl};
+  if(action==="list")return{sets:db.map(meta)};
+  if(action==="get"){const s=db.find(x=>x.id===d.id);return{set:rl==="visitor"?strip(s):s};}
+  if(rl==="visitor"&&action!=="save")throw new Error("অনুমতি নেই");
+  if(action==="save"){const s=Object.assign({},d.set,{id:"q"+Date.now(),created:Date.now(),by:rl});db.unshift(s);save();return{};}
+  if(action==="update"){const i=db.findIndex(x=>x.id===d.set.id);if(rl!=="admin"&&d.set.items.length<db[i].items.length)throw new Error("এডিটর প্রশ্ন মুছতে পারে না");db[i]=d.set;save();return{};}
+  if(action==="delete"){if(rl!=="admin")throw new Error("শুধু অ্যাডমিন মুছতে পারে");db.splice(db.findIndex(x=>x.id===d.id),1);save();return{};}
+}
+
+/* ---------- প্রশ্নপত্র তৈরি (দুই কলাম) ---------- */
+function buildPaper(s,withKey){
+  const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang),p=el("div","paper");
+  const h=el("div","ph");h.appendChild(el("h2",null,s.inst));
+  h.appendChild(el("div",null,s.name)).style.fontWeight="600";
+  h.appendChild(el("div",null,(bn?"শ্রেণি: ":"Class: ")+s.cls+"   |   "+(bn?"বিষয়: ":"Subject: ")+s.subj)).style.fontSize="14px";
+  const m=el("div","meta");m.append(el("span",null,(bn?"সময়: ":"Time: ")+n(s.time)+(bn?" মিনিট":" min")),el("span",null,(bn?"পূর্ণমান: ":"Full marks: ")+n(s.marks)));
+  h.appendChild(m);p.appendChild(h);
+  if(s.type==="mcq"){
+    chunk(s.items,20).forEach((pg,pi)=>{
+      const g=el("div","pg");
+      chunk(pg,10).forEach((col,ci)=>{
+        const c=el("div","col");
+        col.forEach((it,i)=>{const q=el("div","q");q.appendChild(el("p",null,n(pi*20+ci*10+i+1)+". "+it.q));(it.options||[]).forEach((o,j)=>q.appendChild(el("div","op",lab[j]+") "+o)));c.appendChild(q);});
+        g.appendChild(c);
+      });
+      p.appendChild(g);
+    });
+  }else if(s.type==="short"){
+    s.items.forEach((it,i)=>{const d=el("div","q");d.appendChild(el("p",null,n(i+1)+". "+it.q));p.appendChild(d);});
+  }else{
+    s.items.forEach((it,i)=>{const d=el("div","cq");d.appendChild(el("p",null,n(i+1)+". "+it.stem));
+      parts(it).forEach(([j,x,mk])=>{const r=el("div","part");r.append(el("span",null,PL[s.lang][j]+") "+x),el("span",null,n(mk)));d.appendChild(r);});p.appendChild(d);});
+  }
+  if(withKey){
+    const k=el("div","keyp key");k.appendChild(el("strong",null,bn?"উত্তরমালা":"Answer key"));
+    if(s.type==="mcq"){const g=el("div","grid");s.items.forEach((it,i)=>g.appendChild(el("span",null,n(i+1)+"-"+lab[it.answer])));k.appendChild(g);}
+    else if(s.type==="short"){s.items.forEach((it,i)=>{const r=el("div","part");r.appendChild(el("span",null,n(i+1)+". "+it.a));k.appendChild(r);});}
+    else{s.items.forEach((it,i)=>{const b=el("div","cq");b.appendChild(el("p",null,(bn?"প্রশ্ন ":"Question ")+n(i+1)));answers(it).forEach((a,j)=>{const r=el("div","part");r.appendChild(el("span",null,PL[s.lang][j]+") "+a));b.appendChild(r);});k.appendChild(b);});}
+    p.appendChild(k);
+  }
+  return p;
+}
+function printSet(s,k){const pa=$("pa");pa.textContent="";pa.appendChild(buildPaper(s,k));setTimeout(()=>window.print(),80);}
+window.addEventListener("afterprint",()=>{$("pa").textContent="";});
+
+function saveWord(s,k){
+  const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang);
+  const E=t=>String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const BR='<br clear="all" style="page-break-before:always">';
+  let h='<html><head><meta charset="utf-8"><style>body{font-family:"Nirmala UI",Kalpurush,sans-serif;font-size:11.5pt}td{vertical-align:top;width:50%;padding:0 8pt}p{margin:0 0 3pt}.c{text-align:center}</style></head><body>';
+  h+=`<p class="c"><b style="font-size:16pt">${E(s.inst)}</b></p><p class="c"><b>${E(s.name)}</b></p><p class="c">${bn?"শ্রেণি":"Class"}: ${E(s.cls)} | ${bn?"বিষয়":"Subject"}: ${E(s.subj)}</p><p>${bn?"সময়":"Time"}: ${n(s.time)} &nbsp;&nbsp; ${bn?"পূর্ণমান":"Full marks"}: ${n(s.marks)}</p><hr>`;
+  if(s.type==="mcq"){
+    chunk(s.items,20).forEach((pg,pi)=>{
+      if(pi)h+=BR;
+      h+='<table width="100%"><tr>'+chunk(pg,10).map((col,ci)=>"<td>"+col.map((it,i)=>`<p><b>${n(pi*20+ci*10+i+1)}. ${E(it.q)}</b></p>`+(it.options||[]).map((o,j)=>`<p style="margin-left:14pt">${lab[j]}) ${E(o)}</p>`).join("")+"<p>&nbsp;</p>").join("")+"</td>").join("")+"</tr></table>";
+    });
+  }else if(s.type==="short"){
+    s.items.forEach((it,i)=>{h+=`<p>${n(i+1)}. ${E(it.q)}</p><p>&nbsp;</p>`;});
+  }else{
+    s.items.forEach((it,i)=>{h+=`<p><b>${n(i+1)}. ${E(it.stem)}</b></p>`+parts(it).map(([j,x,mk])=>`<p>${PL[s.lang][j]}) ${E(x)} [${n(mk)}]</p>`).join("")+"<p>&nbsp;</p>";});
+  }
+  if(k){
+    h+=BR+`<p><b>${bn?"উত্তরমালা":"Answer key"}</b></p>`;
+    if(s.type==="mcq")h+="<p>"+s.items.map((it,i)=>n(i+1)+"-"+lab[it.answer]).join(", ")+"</p>";
+    else if(s.type==="short")s.items.forEach((it,i)=>{h+=`<p>${n(i+1)}. ${E(it.a)}</p>`;});
+    else s.items.forEach((it,i)=>{h+=`<p><b>${n(i+1)}.</b></p>`+answers(it).map((a,j)=>`<p>${PL[s.lang][j]}) ${E(a)}</p>`).join("");});
+  }
+  h+="</body></html>";
+  const a=el("a");a.href=URL.createObjectURL(new Blob(["\ufeff"+h],{type:"application/msword"}));
+  a.download=(s.subj+"-"+s.name+(k?"-উত্তরসহ":"")).replace(/[\\/:*?"<>|]/g,"")+".doc";
+  document.body.appendChild(a);a.click();a.remove();
+}
+function dlDialog(s,noKey){
+  const w=el("div"),f=el("select"),k=el("select");
+  f.add(new Option("PDF (প্রিন্ট থেকে সেভ)","pdf"));f.add(new Option("Word / Google Docs (.doc)","doc"));
+  k.add(new Option("শুধু প্রশ্ন (উত্তরপত্র ছাড়া)","0"));k.add(new Option("প্রশ্ন + উত্তরপত্র (আলাদা পাতায়)","1"));
+  const b=el("button",null,"ডাউনলোড"),note=el("p","sub","PDF-এর জন্য প্রিন্ট ডায়ালগে “Save as PDF” বেছে নিন। Word ফাইল Google Drive-এ আপলোড করলে Google Docs-এ খোলা যায়।");
+  w.append(el("label",null,"ফরম্যাট"),f);if(!noKey)w.append(el("label",null,"উত্তরপত্র"),k);w.append(b,note);
+  const close=modal("ডাউনলোড",w);
+  b.onclick=()=>{close();const wk=!noKey&&k.value==="1";if(f.value==="pdf")printSet(s,wk);else saveWord(s,wk);};
+}
+
+/* ---------- তৈরি ট্যাব ---------- */
+window.render=function(){showKey=false;drawOut();};
+function drawOut(){
+  const out=$("out");out.textContent="";const s=state;
+  out.appendChild(buildPaper(s,showKey));
+  const bar=el("div","bar");
+  const k=el("button","sec",showKey?"উত্তর লুকান":"উত্তর দেখান");k.onclick=()=>{showKey=!showKey;drawOut();};
+  const cp=(t,w)=>{const b=el("button","sec",t);b.onclick=async()=>{try{await navigator.clipboard.writeText(paperText(w));b.textContent="কপি হয়েছে";}catch(e){b.textContent="কপি করা যায়নি";}};return b;};
+  const d=el("button","sec","ডাউনলোড");d.onclick=()=>dlDialog(s);
+  const sv=el("button","sec","প্রশ্ন ব্যাংকে সংরক্ষণ");
+  sv.onclick=async()=>{sv.disabled=true;try{await api("save",{set:s});toast("প্রশ্ন ব্যাংকে সংরক্ষণ হয়েছে");loadBank();}catch(e){toast("সংরক্ষণ হয়নি: "+e.message);}sv.disabled=false;};
+  bar.append(k,cp("প্রশ্নপত্র কপি",false),cp("উত্তরসহ কপি",true),d,sv);out.appendChild(bar);
+}
+
+/* ---------- প্রশ্ন ব্যাংক ---------- */
+async function loadBank(){
+  $("bankList").textContent="লোড হচ্ছে…";
+  try{sets=(await api("list")).sets;drawBank();}catch(e){$("bankList").textContent="লোড করা যায়নি: "+e.message;}
+}
+function drawBank(){
+  const box=$("bankList"),q=$("bq").value.trim().toLowerCase(),t=$("bt").value;box.textContent="";
+  const list=sets.filter(m=>(!t||m.type===t)&&(!q||[m.inst,m.name,m.cls,m.subj].join(" ").toLowerCase().includes(q)));
+  if(!list.length){box.appendChild(el("p","sub","কোনো প্রশ্ন সেট পাওয়া যায়নি।"));return;}
+  list.forEach(m=>{
+    const c=el("div","bc"),n=x=>num(x,m.lang);
+    c.appendChild(el("h3",null,ttl(m)||"(নামহীন)"));
+    const sm=el("small");sm.append(el("span","badge "+m.type,TN[m.type]));
+    sm.appendChild(document.createTextNode(m.cls+" • "+m.subj+" • "+n(m.count)+"টি প্রশ্ন • "+new Date(m.created).toLocaleDateString("bn-BD")));c.appendChild(sm);
+    const a=el("div","acts"),btn=(t,f,c2)=>{const b=el("button","sec"+(c2?" "+c2:""),t);b.onclick=f;a.appendChild(b);};
+    btn("দেখুন",()=>openSet(m,"view"));
+    btn("ডাউনলোড",()=>openSet(m,"dl"));if(role!=="visitor")btn("সম্পাদনা",()=>openSet(m,"edit"));
+    if(role==="admin")btn("মুছুন",async()=>{if(!confirm("এই প্রশ্ন সেটটি স্থায়ীভাবে মুছে ফেলবেন?"))return;try{await api("delete",{id:m.id});toast("মুছে ফেলা হয়েছে");loadBank();}catch(e){toast(e.message);}},"dng");
+    c.appendChild(a);box.appendChild(c);
+  });
+}
+async function openSet(m,mode){
+  try{
+    const s=(await api("get",{id:m.id})).set;
+    if(mode==="dl")return dlDialog(s,role==="visitor");
+    if(mode==="edit")return editDialog(s,m);
+    let kk=false;const w=el("div"),box=el("div");
+    const draw=()=>{box.textContent="";box.appendChild(buildPaper(s,kk&&role!=="visitor"));};
+    if(role!=="visitor"){const b=el("button","sec","উত্তর দেখান / লুকান");b.onclick=()=>{kk=!kk;draw();};w.appendChild(b);}
+    w.appendChild(box);draw();modal(ttl(m),w,true);
+  }catch(e){toast(e.message);}
+}
+function editDialog(s,m){
+  const w=el("div","ed"),PLb=LAB[s.lang];let close;
+  const f=(l,g,st,multi)=>{const i=el(multi?"textarea":"input");i.value=g()||"";i.oninput=()=>st(i.value);if(multi)i.style.minHeight="70px";w.append(el("label",null,l),i);};
+  const draw=()=>{
+    w.textContent="";
+    [["inst","প্রতিষ্ঠান"],["name","পরীক্ষার নাম"],["cls","শ্রেণি"],["subj","বিষয়"],["time","সময় (মিনিট)"],["marks","পূর্ণমান"]].forEach(([k,l])=>f(l,()=>s[k],v=>{s[k]=v;}));
+    s.items.forEach((it,k)=>{
+      const h=el("h4",null,"প্রশ্ন "+num(k+1,"Bengali"));
+      if(role==="admin"){const d=el("button","sec dng","এটি মুছুন");d.onclick=()=>{s.items.splice(k,1);draw();};h.appendChild(d);}
+      w.appendChild(h);
+      if(s.type==="mcq"){
+        it.options=it.options||["","","",""];
+        f("প্রশ্ন",()=>it.q,v=>{it.q=v;},1);
+        for(let j=0;j<4;j++)f(PLb[j],()=>it.options[j],v=>{it.options[j]=v;});
+        const sel=el("select");PLb.forEach((l,j)=>sel.add(new Option(l,j)));sel.value=it.answer||0;sel.onchange=()=>{it.answer=+sel.value;};w.append(el("label",null,"সঠিক উত্তর"),sel);
+      }else if(s.type==="short"){f("প্রশ্ন",()=>it.q,v=>{it.q=v;},1);f("উত্তর",()=>it.a,v=>{it.a=v;},1);}
+      else{f("উদ্দীপক",()=>it.stem,v=>{it.stem=v;},1);[["k","ak"],["kh","akh"],["g","ag"],["gh","agh"]].forEach(([q,a],j)=>{f(PL[s.lang][j]+") প্রশ্ন",()=>it[q],v=>{it[q]=v;});f(PL[s.lang][j]+") উত্তর",()=>it[a],v=>{it[a]=v;},1);});}
+    });
+    const add=el("button","sec","+ নতুন প্রশ্ন যোগ");
+    add.onclick=()=>{s.items.push(s.type==="mcq"?{q:"",options:["","","",""],answer:0}:s.type==="short"?{q:"",a:""}:{stem:"",k:"",kh:"",g:"",gh:"",ak:"",akh:"",ag:"",agh:""});draw();};
+    const sv=el("button",null,"পরিবর্তন সংরক্ষণ");
+    sv.onclick=async()=>{sv.disabled=true;try{await api("update",{set:s});toast("সংরক্ষণ হয়েছে");close();loadBank();}catch(e){toast(e.message);sv.disabled=false;}};
+    w.append(add,sv);
+  };
+  draw();close=modal("সম্পাদনা: "+ttl(m),w,true);
+}
+
+/* ---------- ট্যাব, লগইন ---------- */
+function show(v){$("vCreate").hidden=v!=="c";$("vBank").hidden=v!=="b";$("tCreate").classList.toggle("on",v==="c");$("tBank").classList.toggle("on",v==="b");}
+function applyRole(){
+  $("tCreate").hidden=false;$("roleTxt").textContent=role==="visitor"?"":RN[role];
+  $("loginBtn").textContent=role==="visitor"?"লগইন":"লগআউট";
+  if(role==="visitor")show("b");drawBank();
+}
+function loginDialog(){
+  const w=el("div"),i=el("input"),b=el("button",null,"প্রবেশ করুন");
+  i.type="password";i.placeholder="পাসওয়ার্ড";w.append(i,b,el("p","sub","পাসওয়ার্ড ছাড়া আপনি ভিজিটর হিসেবে শুধু প্রশ্ন দেখতে পারবেন।"));
+  const close=modal("লগইন",w);
+  const go=async()=>{
+    pw=i.value;try{role=(await api("login")).role;}catch(e){role="visitor";}
+    if(role==="visitor"){pw="";toast("পাসওয়ার্ড ঠিক নয়");return;}
+    sessionStorage.setItem("qb_pw",pw);close();applyRole();loadBank();toast(RN[role]+" হিসেবে প্রবেশ করেছেন");
+  };
+  b.onclick=go;i.onkeydown=e=>{if(e.key==="Enter")go();};setTimeout(()=>i.focus(),50);
+}
+$("tBank").onclick=()=>show("b");$("tCreate").onclick=()=>show("c");
+$("loginBtn").onclick=()=>{if(role==="visitor")loginDialog();else{pw="";role="visitor";sessionStorage.removeItem("qb_pw");applyRole();loadBank();}};
+$("bq").oninput=drawBank;$("bt").onchange=drawBank;
+
+if(DEMO){
+  $("demoNote").hidden=false;
+  if(!localStorage.getItem("qb_demo")){
+    const mc=Array.from({length:22},(_,i)=>({q:"নমুনা প্রশ্ন "+num(i+1,"Bengali")+": সঠিক উত্তরটি কোনটি?",options:["প্রথম অপশন","দ্বিতীয় অপশন","তৃতীয় অপশন","চতুর্থ অপশন"],answer:i%4}));
+    localStorage.setItem("qb_demo",JSON.stringify([{id:"d1",type:"mcq",lang:"Bengali",inst:"নমুনা উচ্চ বিদ্যালয়",name:"মডেল টেস্ট",cls:"অষ্টম",subj:"সাধারণ বিজ্ঞান",time:"৩০",marks:"২২",items:mc,created:Date.now(),by:"admin"}]));
+  }
+}
+pw=sessionStorage.getItem("qb_pw")||"";
+if(pw)api("login").then(r=>{role=r.role;if(role==="visitor")pw="";}).catch(()=>{pw="";}).finally(()=>{applyRole();loadBank();});
+else{applyRole();loadBank();}
+})();
+</script>
+
+<div class="md ocr" id="ocrM" hidden role="dialog" aria-modal="true" aria-labelledby="ocrT">
+<div class="mb">
+<button type="button" class="sec x" id="ocrX">বন্ধ করুন</button>
+<h3 id="ocrT">ছবি থেকে লেখা বাছুন</h3>
+<div class="ocrbox"><div class="ocrwrap" id="ocrWrap"><img id="ocrImg" alt="আপলোড করা ছবি"><div class="ocrov" id="ocrOv"></div><div class="scan" id="ocrScan" hidden></div></div></div>
+<div class="ocrst" id="ocrSt" aria-live="polite"></div>
+<div class="ocrbar">
+<button type="button" class="sec" id="ocrAll" disabled>সব সিলেক্ট</button>
+<button type="button" class="sec" id="ocrClr" disabled>সিলেক্ট মুছুন</button>
+<button type="button" class="go2" id="ocrPut" disabled>ঘরে বসাও</button>
+</div>
+</div>
+</div>
+<script>
+(function(){
+const g=id=>document.getElementById(id);
+const M=g("ocrM"),IMG=g("ocrImg"),OV=g("ocrOv"),SC=g("ocrScan"),ST=g("ocrSt"),PUT=g("ocrPut"),ALL=g("ocrAll"),CLR=g("ocrClr"),FILE=g("imgFile");
+let words=[],els=[],job=0,url="",libP=null;
+const TESS="https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js";
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+function toast(t){const d=document.createElement("div");d.className="toast";d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),2600);}
+function lib(){
+  if(window.Tesseract)return Promise.resolve();
+  if(!libP)libP=new Promise((ok,no)=>{const s=document.createElement("script");s.src=TESS;s.onload=ok;s.onerror=()=>{libP=null;no(new Error("lib"));};document.head.appendChild(s);});
+  return libP;
+}
+function shrink(file){
+  return new Promise((ok,no)=>{
+    const u=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{
+      const m=1800,r=Math.min(1,m/Math.max(im.naturalWidth,im.naturalHeight));
+      const c=document.createElement("canvas");c.width=Math.round(im.naturalWidth*r);c.height=Math.round(im.naturalHeight*r);
+      const x=c.getContext("2d");x.fillStyle="#fff";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);
+      c.toBlob(b=>{URL.revokeObjectURL(u);b?ok({c,b}):no(new Error("img"));},"image/jpeg",.92);
+    };
+    im.onerror=()=>{URL.revokeObjectURL(u);no(new Error("img"));};
+    im.src=u;
+  });
+}
+function reset(){words=[];els=[];OV.textContent="";ALL.disabled=CLR.disabled=PUT.disabled=true;}
+function close(){job++;M.hidden=true;document.body.style.overflow="";if(url){URL.revokeObjectURL(url);url="";}reset();SC.hidden=true;FILE.value="";}
+function count(){const n=words.filter(w=>w.on).length;PUT.disabled=!n;CLR.disabled=!n;PUT.textContent=n?"ঘরে বসাও ("+bn(n)+"টি শব্দ)":"ঘরে বসাও";}
+function setOn(i,v){const w=words[i];if(!w||w.on===v)return;w.on=v;els[i].classList.toggle("on",v);}
+function draw(W,H,list){
+  reset();
+  list.forEach((w,i)=>{
+    const d=document.createElement("div");d.className="w";d.dataset.i=i;
+    d.style.left=(w.x0/W*100)+"%";d.style.top=(w.y0/H*100)+"%";d.style.width=((w.x1-w.x0)/W*100)+"%";d.style.height=((w.y1-w.y0)/H*100)+"%";
+    OV.appendChild(d);words.push({t:w.t,l:w.l,on:false});els.push(d);
+  });
+  ALL.disabled=!words.length;
+}
+/* ট্যাপ ও ড্র্যাগ করে সিলেক্ট */
+let drag=null;
+function hit(e){const t=document.elementFromPoint(e.clientX,e.clientY);return t&&t.classList.contains("w")?+t.dataset.i:-1;}
+OV.addEventListener("pointerdown",e=>{const i=hit(e);if(i<0)return;e.preventDefault();OV.setPointerCapture(e.pointerId);drag={v:!words[i].on};setOn(i,drag.v);count();});
+OV.addEventListener("pointermove",e=>{if(!drag)return;const i=hit(e);if(i>=0){setOn(i,drag.v);count();}});
+["pointerup","pointercancel"].forEach(n=>OV.addEventListener(n,()=>{drag=null;}));
+ALL.onclick=()=>{const v=words.some(w=>!w.on);words.forEach((_,i)=>setOn(i,v));count();ALL.textContent=v?"সব বাদ দিন":"সব সিলেক্ট";};
+CLR.onclick=()=>{words.forEach((_,i)=>setOn(i,false));count();ALL.textContent="সব সিলেক্ট";};
+PUT.onclick=()=>{
+  let out="",last=null;
+  words.forEach(w=>{if(!w.on)return;if(last===null)out=w.t;else out+=(w.l===last?" ":"\n")+w.t;last=w.l;});
+  if(!out)return;
+  const ta=g("stem");
+  ta.value=ta.value.trim()?ta.value.replace(/\s+$/,"")+"\n"+out:out;
+  ta.dispatchEvent(new Event("input",{bubbles:true}));
+  close();ta.focus();toast("লেখা ঘরে বসেছে। চাইলে এডিট করুন।");
+};
+g("ocrX").onclick=close;
+M.addEventListener("click",e=>{if(e.target===M)close();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!M.hidden)close();});
+g("imgBtn").onclick=()=>FILE.click();
+FILE.onchange=async()=>{
+  const f=FILE.files&&FILE.files[0];if(!f)return;
+  const my=++job;reset();ALL.textContent="সব সিলেক্ট";
+  M.hidden=false;document.body.style.overflow="hidden";
+  if(url)URL.revokeObjectURL(url);
+  url=URL.createObjectURL(f);IMG.src=url;
+  SC.hidden=false;ST.textContent="ছবি প্রস্তুত হচ্ছে…";count();
+  try{
+    const {c,b}=await shrink(f);if(my!==job)return;
+    URL.revokeObjectURL(url);url=URL.createObjectURL(b);IMG.src=url;
+    ST.textContent="লেখা শনাক্তকরণ ইঞ্জিন লোড হচ্ছে…";
+    await lib();if(my!==job)return;
+    const r=await Tesseract.recognize(c,"ben+eng",{logger:m=>{if(my!==job)return;if(m.status==="recognizing text")ST.textContent="লেখা শনাক্ত হচ্ছে… "+bn(Math.round(m.progress*100))+"%";else if(/load|init/.test(m.status))ST.textContent="বাংলা ভাষার ডেটা লোড হচ্ছে… (প্রথমবার কিছুটা সময় লাগে)";}});
+    if(my!==job)return;
+    const list=[];
+    (r.data.lines||[]).forEach((ln,li)=>(ln.words||[]).forEach(w=>{
+      const t=(w.text||"").trim();
+      if(t&&w.confidence>=30)list.push({t,l:li,x0:w.bbox.x0,y0:w.bbox.y0,x1:w.bbox.x1,y1:w.bbox.y1});
+    }));
+    SC.hidden=true;
+    if(!list.length){ST.textContent="কোনো লেখা পাওয়া যায়নি। আরও স্পষ্ট ও সোজা করে তোলা ছবি দিয়ে আবার চেষ্টা করুন।";return;}
+    draw(c.width,c.height,list);
+    ST.textContent=bn(list.length)+"টি শব্দ পাওয়া গেছে। শব্দে ট্যাপ করুন বা আঙুল টেনে বেছে নিন।";
+  }catch(err){
+    if(my!==job)return;
+    SC.hidden=true;
+    ST.textContent=err&&err.message==="lib"?"শনাক্তকরণ ইঞ্জিন লোড হয়নি। ইন্টারনেট সংযোগ দেখে আবার চেষ্টা করুন।":"ছবি থেকে লেখা বের করা যায়নি। অন্য ছবি দিয়ে চেষ্টা করুন।";
+  }
+};
 })();
 </script>
 </body>
