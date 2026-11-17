@@ -128,6 +128,7 @@ body::before{background:radial-gradient(40% 35% at 15% 20%,rgba(56,189,248,.35),
 .card select option{background:var(--fld);color:var(--tx)}
 
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+@media print{body{background:#fff}body::before,.top,main>*:not(#out),.bar,.paper::before{display:none!important}.paper{border:0;box-shadow:none;animation:none;padding-top:0}}
 
 /* ===== নতুন অংশ ===== */
 .top{padding-bottom:92px}
@@ -160,32 +161,30 @@ button.dng:hover{background:#be123c;color:#fff}
 .ed h4{margin:16px 0 6px;display:flex;justify-content:space-between;align-items:center;color:var(--ac)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:99;background:#1a0b3d;color:#fff;padding:10px 18px;border-radius:99px;font-size:15px;box-shadow:0 10px 30px -8px #000;animation:rise .3s}
 
-/* MCQ: স্ক্রিনে দুই কলাম; অপশন বোর্ড-স্টাইলে (৪টি এক লাইনে / ২×২ / নিচে নিচে) */
-.mcq{column-count:2;column-gap:28px;column-rule:1px solid var(--pbd)}
-.mcq .q{break-inside:avoid;page-break-inside:avoid;margin:0 0 12px}
-.q .opts2{display:grid;grid-template-columns:1fr;gap:2px 14px;margin-left:12px;font-size:14.5px}
-.q .opts2 .op{margin:0;font-size:inherit;min-width:0}
-@media (max-width:520px){.mcq{column-count:1;column-rule:0}}
-
-/* প্রিন্ট/PDF: নিজে মাপা পেজ */
+/* দুই কলামের MCQ পাতা */
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;position:relative}
+.pg::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px solid var(--pbd)}
+.pg+.pg{margin-top:20px;padding-top:16px;border-top:1px dashed var(--pbd)}
+.col{min-width:0}
+.q .op{font-size:14.5px;margin-left:12px}
+@media (max-width:520px){.pg{grid-template-columns:1fr}.pg::after{display:none}}
 #pa{display:none}
-#pa.pm{display:block;position:absolute;left:-99999px;top:0;width:186mm;visibility:hidden}
-#pa .paper{font-size:12px;line-height:1.4;padding:0;margin:0;color:#000;border:0;border-radius:0;box-shadow:none;animation:none;background:#fff}
-#pa .paper::before{display:none}
-.sheet{height:268mm;display:flex;flex-direction:column;overflow:hidden;break-after:page;page-break-after:always}
-.sbody{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:minmax(0,1fr);column-gap:14mm;position:relative}
-.sbody::after{content:"";position:absolute;left:50%;top:0;bottom:0;border-left:1px solid #999}
-.scol{min-width:0;height:100%;overflow:hidden}
-.scol .q{margin:0 0 9px;break-inside:avoid}
-.scol .q p{margin:0 0 3px;font-weight:600}
+.col{min-width:0;display:flow-root}
+.ops.g2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+.ops.probe .op{white-space:nowrap;overflow:hidden}
+.q{break-inside:avoid}
+.paper.pm{margin-top:0;padding:0;border:0;border-radius:0;box-shadow:none;animation:none;font-size:12px;line-height:1.4}
+.pm::before{display:none}
+.pm .ph{padding-bottom:10px;margin-bottom:18px}
+.pm .q{margin:8px 0}.pm .q .op{font-size:12px}
+.pm .pg{grid-template-columns:1fr 1fr!important}
+.pm .pg::after{display:block!important}
+.pm .pg+.pg,.pm .keyp{break-before:page;border-top:0;margin-top:0;padding-top:0}
 @media print{
   @page{size:A4;margin:12mm}
-  html,body{background:#fff!important;min-height:0!important;height:auto!important;margin:0!important}
-  body::before{display:none!important}
   body>*:not(#pa){display:none!important}
   #pa{display:block!important}
-  #pa .q .opts2{font-size:12px}
-  #pa .keyp{break-before:page;page-break-before:always;border-top:0;margin-top:0;padding-top:0}
+}
 }
 
 /* ছবি থেকে লেখা (লেন্স-স্টাইল) */
@@ -429,19 +428,56 @@ function demo(action,d){
 }
 
 /* ---------- প্রশ্নপত্র তৈরি (দুই কলাম) ---------- */
-function buildPaper(s,withKey){
-  const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang),p=el("div","paper");
+function mkHead(s){
+  const bn=s.lang==="Bengali",n=x=>num(x,s.lang);
   const h=el("div","ph");h.appendChild(el("h2",null,s.inst));
   h.appendChild(el("div",null,s.name)).style.fontWeight="600";
   h.appendChild(el("div",null,(bn?"শ্রেণি: ":"Class: ")+s.cls+"   |   "+(bn?"বিষয়: ":"Subject: ")+s.subj)).style.fontSize="14px";
   const m=el("div","meta");m.append(el("span",null,(bn?"সময়: ":"Time: ")+n(s.time)+(bn?" মিনিট":" min")),el("span",null,(bn?"পূর্ণমান: ":"Full marks: ")+n(s.marks)));
-  h.appendChild(m);p.appendChild(h);
+  h.appendChild(m);return h;
+}
+function mkQ(it,i,s){
+  const lab=LAB[s.lang],q=el("div","q");q.appendChild(el("p",null,num(i+1,s.lang)+". "+it.q));
+  const o=el("div","ops");(it.options||[]).forEach((x,j)=>o.appendChild(el("div","op",lab[j]+") "+x)));q.appendChild(o);return q;
+}
+/* ছোট অপশন হলে ক খ / গ ঘ (২×২), বড় হলে এক লাইনে একটি */
+function fitOps(q){const o=q.lastChild;o.classList.add("g2","probe");const bad=[...o.children].some(c=>c.scrollWidth>c.clientWidth+1);o.classList.remove("probe");if(bad)o.classList.remove("g2");return !bad;}
+const PAGE_H=Math.floor(273*96/25.4),SAFE=18;
+/* কতগুলো প্রশ্ন বাম কলামে ধরবে তা পাতার আসল উচ্চতা মেপে ঠিক করে: আগে বাম কলাম পূর্ণ, তারপর ডান কলাম, তারপর নতুন পাতা */
+function mcqPlan(s,mode,factor){
+  const print=mode==="print",narrow=!print&&innerWidth<=520;
+  const W=print?703:Math.max(280,Math.min(innerWidth-40,720));
+  const sb=el("div");sb.style.cssText="position:absolute;left:-99999px;top:0;visibility:hidden;width:"+W+"px";
+  const p=el("div","paper"+(print?" pm":""));sb.appendChild(p);document.body.appendChild(sb);
+  const h=mkHead(s);p.appendChild(h);
+  const hh=h.offsetHeight+(parseFloat(getComputedStyle(h).marginBottom)||0);
+  const full=print?PAGE_H:Math.round(p.clientWidth*273/186);
+  const pages=[],g2=[];let pg,ci,limit,first=true;
+  const newPg=()=>{pg=el("div","pg");pg.append(el("div","col"),el("div","col"));p.appendChild(pg);pages.push([[],[]]);ci=0;limit=narrow?1e9:((first?full-hh:full)-SAFE)*(factor||1);first=false;};
+  newPg();
+  s.items.forEach((it,i)=>{
+    const q=mkQ(it,i,s);
+    for(;;){
+      const col=pg.children[ci];col.appendChild(q);g2[i]=fitOps(q);
+      if(col.offsetHeight<=limit||col.children.length===1)break;
+      col.removeChild(q);
+      if(ci===0)ci=1;else newPg();
+    }
+    pages[pages.length-1][ci].push(i);
+  });
+  sb.remove();
+  return{pages,g2};
+}
+function buildPaper(s,withKey,print){
+  const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang),p=el("div","paper"+(print?" pm":""));
+  p.appendChild(mkHead(s));
   if(s.type==="mcq"){
-    const g=el("div","mcq");
-    s.items.forEach((it,i)=>{const q=el("div","q");q.appendChild(el("p",null,n(i+1)+". "+it.q));
-      const o=el("div","opts2");(it.options||[]).forEach((x,j)=>o.appendChild(el("div","op",lab[j]+") "+x)));
-      q.appendChild(o);g.appendChild(q);});
-    p.appendChild(g);
+    const plan=mcqPlan(s,print?"print":"screen",1);
+    plan.pages.forEach(cols=>{
+      const g=el("div","pg");
+      cols.forEach(idx=>{const c=el("div","col");idx.forEach(i=>{const q=mkQ(s.items[i],i,s);if(plan.g2[i])q.lastChild.classList.add("g2");c.appendChild(q);});g.appendChild(c);});
+      p.appendChild(g);
+    });
   }else if(s.type==="short"){
     s.items.forEach((it,i)=>{const d=el("div","q");d.appendChild(el("p",null,n(i+1)+". "+it.q));p.appendChild(d);});
   }else{
@@ -457,60 +493,25 @@ function buildPaper(s,withKey){
   }
   return p;
 }
-function fitOpts(root){
-  root.querySelectorAll(".opts2").forEach(o=>{
-    const ops=[...o.children];if(!ops.length)return;
-    o.style.display="block";
-    ops.forEach(x=>{x.style.display="inline-block";x.style.whiteSpace="nowrap";});
-    const avail=o.clientWidth,gap=14;let mx=0;
-    ops.forEach(x=>{mx=Math.max(mx,x.getBoundingClientRect().width);});
-    ops.forEach(x=>{x.style.display="";x.style.whiteSpace="";});
-    const c=(mx*4+gap*3<=avail)?4:(mx*2+gap<=avail)?2:1;
-    o.style.display="grid";o.style.gridTemplateColumns="repeat("+c+",minmax(0,1fr))";
-  });
-}
-function paginate(pa,paper){
-  const ph=paper.querySelector(".ph"),qs=[...paper.querySelectorAll(".mcq .q")],key=paper.querySelector(".keyp");
-  paper.textContent="";
-  let cols,col=0,first=true,last=null;
-  const newSheet=()=>{
-    const sh=el("div","sheet");if(first){sh.appendChild(ph);first=false;}
-    const body=el("div","sbody"),c1=el("div","scol"),c2=el("div","scol");
-    body.append(c1,c2);sh.appendChild(body);paper.appendChild(sh);cols=[c1,c2];col=0;last=sh;
-  };
-  newSheet();
-  qs.forEach(q=>{
-    for(;;){
-      const c=cols[col];c.appendChild(q);fitOpts(q);
-      if(c.scrollHeight<=c.clientHeight+1||c.children.length===1)break;
-      q.remove();
-      if(col===0)col=1;else newSheet();
-    }
-  });
-  if(last)last.style.breakAfter=last.style.pageBreakAfter="auto";
-  if(key)paper.appendChild(key);
-}
-function printSet(s,k){
-  const pa=$("pa");pa.textContent="";
-  const paper=buildPaper(s,k);pa.appendChild(paper);pa.classList.add("pm");
-  const go=()=>{
-    if(s.type==="mcq")paginate(pa,paper);
-    pa.classList.remove("pm");
-    setTimeout(()=>window.print(),150);
-  };
-  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(go);
-}
-window.addEventListener("afterprint",()=>{$("pa").textContent="";$("pa").classList.remove("pm");});
+function printSet(s,k){const pa=$("pa");pa.textContent="";pa.appendChild(buildPaper(s,k,true));setTimeout(()=>window.print(),80);}
+window.addEventListener("afterprint",()=>{$("pa").textContent="";});
 
 function saveWord(s,k){
   const bn=s.lang==="Bengali",lab=LAB[s.lang],n=x=>num(x,s.lang);
   const E=t=>String(t==null?"":t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
   const BR='<br clear="all" style="page-break-before:always">';
-  let h='<html><head><meta charset="utf-8"><style>body{font-family:"Nirmala UI",Kalpurush,sans-serif;font-size:11.5pt}td{vertical-align:top;width:50%;padding:0 8pt}p{margin:0 0 3pt}.c{text-align:center}</style></head><body>';
+  let h='<html><head><meta charset="utf-8"><style>body{font-family:"Nirmala UI",Kalpurush,sans-serif;font-size:11.5pt}td{vertical-align:top;width:50%;padding:0 8pt}table.o td{padding:0 0 0 14pt}p{margin:0 0 3pt}.c{text-align:center}</style></head><body>';
   h+=`<p class="c"><b style="font-size:16pt">${E(s.inst)}</b></p><p class="c"><b>${E(s.name)}</b></p><p class="c">${bn?"শ্রেণি":"Class"}: ${E(s.cls)} | ${bn?"বিষয়":"Subject"}: ${E(s.subj)}</p><p>${bn?"সময়":"Time"}: ${n(s.time)} &nbsp;&nbsp; ${bn?"পূর্ণমান":"Full marks"}: ${n(s.marks)}</p><hr>`;
   if(s.type==="mcq"){
-    const half=Math.ceil(s.items.length/2),cell=arr=>"<td>"+arr.map(it=>{const i=s.items.indexOf(it);return `<p><b>${n(i+1)}. ${E(it.q)}</b></p><p style="margin-left:14pt">`+(it.options||[]).map((o,j)=>`${lab[j]}) ${E(o)}`).join(" &nbsp; ")+"</p><p>&nbsp;</p>";}).join("")+"</td>";
-    h+='<table width="100%"><tr>'+cell(s.items.slice(0,half))+cell(s.items.slice(half))+"</tr></table>";
+    const plan=mcqPlan(s,"print",.9);
+    plan.pages.forEach((cols,pi)=>{
+      if(pi)h+=BR;
+      h+='<table width="100%"><tr>'+cols.map(idx=>"<td>"+idx.map(i=>{
+        const it=s.items[i],o=it.options||[];
+        const ops=plan.g2[i]?'<table class="o" width="100%"><tr><td>'+lab[0]+") "+E(o[0])+"</td><td>"+lab[1]+") "+E(o[1])+"</td></tr><tr><td>"+lab[2]+") "+E(o[2])+"</td><td>"+lab[3]+") "+E(o[3])+"</td></tr></table>":o.map((x,j)=>`<p style="margin-left:14pt">${lab[j]}) ${E(x)}</p>`).join("");
+        return `<div style="margin-bottom:8pt"><p><b>${n(i+1)}. ${E(it.q)}</b></p>${ops}</div>`;
+      }).join("")+"</td>").join("")+"</tr></table>";
+    });
   }else if(s.type==="short"){
     s.items.forEach((it,i)=>{h+=`<p>${n(i+1)}. ${E(it.q)}</p><p>&nbsp;</p>`;});
   }else{
@@ -531,24 +532,17 @@ function dlDialog(s,noKey){
   const w=el("div"),f=el("select"),k=el("select");
   f.add(new Option("PDF (প্রিন্ট থেকে সেভ)","pdf"));f.add(new Option("Word / Google Docs (.doc)","doc"));
   k.add(new Option("শুধু প্রশ্ন (উত্তরপত্র ছাড়া)","0"));k.add(new Option("প্রশ্ন + উত্তরপত্র (আলাদা পাতায়)","1"));
-  const fld=(l,key,ph)=>{const i=el("input");i.value=s[key]||"";i.placeholder=ph;i.style.marginBottom="8px";w.append(el("label",null,l),i);return i;};
-  const iI=fld("প্রতিষ্ঠানের নাম","inst","স্কুলের নাম লিখুন"),iC=fld("শ্রেণি","cls","যেমন: অষ্টম"),iS=fld("বিষয়","subj","যেমন: ইতিহাস");
-  const b=el("button",null,"ডাউনলোড"),note=el("p","sub","PDF-এর জন্য প্রিন্ট ডায়ালগে “Save as PDF” বেছে নিন। প্রশ্ন প্রথম পেজ থেকে শুরু হবে এবং উত্তরপত্র আলাদা পরের পেজে যাবে। Word ফাইল Google Drive-এ আপলোড করলে Google Docs-এ খোলা যায়।");
+  const b=el("button",null,"ডাউনলোড"),note=el("p","sub","PDF-এর জন্য প্রিন্ট ডায়ালগে “Save as PDF” বেছে নিন। Word ফাইল Google Drive-এ আপলোড করলে Google Docs-এ খোলা যায়।");
   w.append(el("label",null,"ফরম্যাট"),f);if(!noKey)w.append(el("label",null,"উত্তরপত্র"),k);w.append(b,note);
   const close=modal("ডাউনলোড",w);
-  b.onclick=()=>{
-    const bad=[[iI,"প্রতিষ্ঠানের নাম"],[iC,"শ্রেণি"],[iS,"বিষয়"]].find(([i])=>!i.value.trim());
-    if(bad){bad[0].focus();toast(bad[1]+" ফাঁকা রাখা যাবে না");return;}
-    const t=Object.assign({},s,{inst:iI.value.trim(),cls:iC.value.trim(),subj:iS.value.trim()});
-    close();const wk=!noKey&&k.value==="1";if(f.value==="pdf")printSet(t,wk);else saveWord(t,wk);
-  };
+  b.onclick=()=>{close();const wk=!noKey&&k.value==="1";if(f.value==="pdf")printSet(s,wk);else saveWord(s,wk);};
 }
 
 /* ---------- তৈরি ট্যাব ---------- */
 window.render=function(){showKey=false;drawOut();};
 function drawOut(){
   const out=$("out");out.textContent="";const s=state;
-  out.appendChild(buildPaper(s,showKey));fitOpts(out);
+  out.appendChild(buildPaper(s,showKey));
   const bar=el("div","bar");
   const k=el("button","sec",showKey?"উত্তর লুকান":"উত্তর দেখান");k.onclick=()=>{showKey=!showKey;drawOut();};
   const cp=(t,w)=>{const b=el("button","sec",t);b.onclick=async()=>{try{await navigator.clipboard.writeText(paperText(w));b.textContent="কপি হয়েছে";}catch(e){b.textContent="কপি করা যায়নি";}};return b;};
@@ -585,9 +579,9 @@ async function openSet(m,mode){
     if(mode==="dl")return dlDialog(s,role==="visitor");
     if(mode==="edit")return editDialog(s,m);
     let kk=false;const w=el("div"),box=el("div");
-    const draw=()=>{box.textContent="";box.appendChild(buildPaper(s,kk&&role!=="visitor"));fitOpts(box);};
+    const draw=()=>{box.textContent="";box.appendChild(buildPaper(s,kk&&role!=="visitor"));};
     if(role!=="visitor"){const b=el("button","sec","উত্তর দেখান / লুকান");b.onclick=()=>{kk=!kk;draw();};w.appendChild(b);}
-    w.appendChild(box);draw();modal(ttl(m),w,true);fitOpts(box);
+    w.appendChild(box);draw();modal(ttl(m),w,true);
   }catch(e){toast(e.message);}
 }
 function editDialog(s,m){
